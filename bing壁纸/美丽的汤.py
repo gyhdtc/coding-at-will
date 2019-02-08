@@ -34,7 +34,7 @@ try:
     fileOb = open(Image_path, 'wb')     #打开一个文件，没有就新建一个
     fileOb.write(htmldata)
     fileOb.close()
-    flag = 2;
+    flag = 2
 except:
     print ("Save Error")
 
