@@ -25,7 +25,7 @@ except:
 Temp = Soup.link.attrs['href']
 Image_Url = "https://cn.bing.com" + Temp
 # 保存图片
-name = Temp.split('/')[4]   # 名字就用 /az/hprichbg/rb/###.jpg 中的 ###.jpg 来命名吧
+name = Temp.split('/')[-1]   # 名字就用 /az/hprichbg/rb/###.jpg 中的 ###.jpg 来命名吧
 # urllib.request.urlretrieve(Image_Url, name)
 response = urllib.request.urlopen(Image_Url)
 htmldata = response.read()
