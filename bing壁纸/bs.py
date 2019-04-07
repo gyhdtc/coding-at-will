@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import sys
 import os
+import time
 # log日志记录
 def log(flag, Image_path, Image_Url):
     print ("文件网址 ：", Image_Url)
@@ -25,7 +26,7 @@ except:
 Temp = Soup.link.attrs['href']
 Image_Url = "https://cn.bing.com" + Temp
 # 保存图片
-name = Temp.split('/')[-1].split('&')[1]  # 名字就用 /az/hprichbg/rb/###.jpg 中的 ###.jpg 来命名吧
+name = time.strftime("%Y-%m-%d") + Temp.split('/')[-1].split('&')[1]  # 名字就用 /az/hprichbg/rb/###.jpg 中的 ###.jpg 来命名吧
 # urllib.request.urlretrieve(Image_Url, name)
 response = urllib.request.urlopen(Image_Url)
 htmldata = response.read()
