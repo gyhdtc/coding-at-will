@@ -19,6 +19,7 @@ path = os.path.split( os.path.realpath( sys.argv[0] ) )[0]
 # 获取图片url
 try:
     Page = urllib.request.urlopen('https://www.bing.com/?mkt=zh-CN&mkt=zh-CN').read()
+    print (Page)
     Soup = BeautifulSoup(Page,"lxml")
     flag = 1
 except:
