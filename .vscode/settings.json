@@ -1,3 +1,9 @@
 {
-    "python.linting.pylintArgs": ["--generate-members"]
+    "python.linting.pylintArgs": [
+        "--generate-members"
+    ],
+    "files.associations": {
+        "*.py": "python",
+        "list": "cpp"
+    }
 }
