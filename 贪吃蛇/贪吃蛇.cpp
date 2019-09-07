@@ -73,11 +73,12 @@ void TcsGame::TcsMove(){
 }
 void TcsGame::MakeFood(){
     int x = r_random(100-SnakeLength);
+    //cout << x;
     for (int i = 0, j = 0; j <= x;  i++) {
         if (board[i] == 0) j++;
         if (j > x) {
-            food = i - 1;
-            board[i - 1] = 2;
+            food = i;
+            board[i] = 2;
         }
     }
 }
