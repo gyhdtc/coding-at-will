@@ -1,10 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <ctime>
 #include <iomanip>
 using namespace std;
 #define SideLength 10
-#define random(x) (rand()%x)
+#define r_random(x) (rand() % x)
 
 class TcsGame {
     private:
@@ -21,11 +22,14 @@ class TcsGame {
         TcsGame();
         void TcsShow() const;
         void TcsMove();
+        void MakeFood();
         bool TcsJudge();
         bool TcsJudgeOutRange(int, int);
 };
 
 TcsGame::TcsGame(){
+    // reset send
+    srand((unsigned)time(NULL));
     // score
     score = 0;
     // board
@@ -38,14 +42,6 @@ TcsGame::TcsGame(){
     snake.push_back(55);
     board[45] = 1;
     board[55] = 1;
-    // init food
-    for (int i = 0, x = random(100-SnakeLength); i <= x;) {
-        if (board[i] == 0) i++;
-        if (i > x) {
-            food = i-1;
-            board[i-1] = 2;
-        }
-    }
 }
 void TcsGame::TcsShow() const{
     for (int i = 0; i < SideLength; i++){
@@ -65,8 +61,20 @@ void TcsGame::TcsShow() const{
     cout << "---------------------" << endl;
 }
 void TcsGame::TcsMove(){
-    while(move != 'w' && move != 'a' && move != 's' && move != 'd' && move != '/')
+    cin >> move;
+    while(move != 'w' && move != 'a' && move != 's' && move != 'd' && move != '/'){
+        cout << "Wrong Input." << endl;
         cin >> move;
+    }
+}
+void TcsGame::MakeFood(){
+    for (int i = 0, x = r_random((100-SnakeLength)); i <= x;) {
+        if (board[i] == 0) i++;
+        if (i > x) {
+            food = i-1;
+            board[i-1] = 2;
+        }
+    }
 }
 bool TcsGame::TcsJudge(){
     int new_snake_head_num;
@@ -74,6 +82,7 @@ bool TcsGame::TcsJudge(){
     int new_snake_head_y;
     int snake_head_x = snake.front() / SideLength;
     int snake_head_y = snake.front() % SideLength;
+    list<int>::iterator it_tcs = snake.begin();
     // calculate input_move 
     switch(move){
         case 'w':
@@ -95,19 +104,17 @@ bool TcsGame::TcsJudge(){
         case '/':
             // end of the game
             return false;
-        default :
-            // other input char is illegitimate
-            cout << "Wrong Input" << endl;
-            return true;
     }
     // whether legitimate input_move range / wall
     if (TcsJudgeOutRange(new_snake_head_x, new_snake_head_y)) return false;
+
     // whether legitimate input_move body
     new_snake_head_num = new_snake_head_x * SideLength + new_snake_head_y;
+    //cout << "new_snake_head_num : " << new_snake_head_num << endl;
     if (board[new_snake_head_num] == 1){
         // new head can't equal the second head
-        if (new_snake_head_num == snake[1]){
-            cout << "Can't come back" << endl;
+        if (new_snake_head_num == *(++it_tcs)){
+            cout << "Can't come back " << endl;
             return true;
         }
         // you will die when the new head equal other num of body
@@ -115,24 +122,39 @@ bool TcsGame::TcsJudge(){
             return false;
         }
     }
-    // eat food ?
+// eat food ?
     snake.push_front(new_snake_head_num);
+    // eat
     if (board[new_snake_head_num] == 2){
+        board[new_snake_head_num] = 1;
         SnakeLength ++;
+        score ++;
+        MakeFood();
     }
+    // don't eat
     else{
+        int tcs_wei = snake.back();
+        board[new_snake_head_num] = 1;
+        board[tcs_wei] = 0;
         snake.pop_back();
     }
+    return true;
 }
 bool TcsGame::TcsJudgeOutRange(int x, int y){
-    if (x < 0 && x >= SideLength && y < 0 && y >= SideLength) 
+    if (x < 0 || x >= SideLength || y < 0 || y >= SideLength) 
         return true;
     else
         return false;
 }
 int main(){
     TcsGame gyh;
+    gyh.MakeFood();
     gyh.TcsShow();
     gyh.TcsMove();
+    while(gyh.TcsJudge()){
+        gyh.TcsShow();
+        gyh.TcsMove();    
+    }
+    cout << "GAME OVER!" << endl;
     return 0;
 }

@@ -6,5 +6,6 @@
         "*.py": "python",
         "list": "cpp",
         "ostream": "cpp"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }
