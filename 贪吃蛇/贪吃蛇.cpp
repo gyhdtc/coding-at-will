@@ -5,7 +5,7 @@
 #include <iomanip>
 using namespace std;
 #define SideLength 10
-#define r_random(x) (rand() % x)
+#define r_random(x) (rand() % (x))
 
 class TcsGame {
     private:
@@ -48,11 +48,15 @@ void TcsGame::TcsShow() const{
         for (int j = 0; j < SideLength; j++){
             int num = i * SideLength + j;
             if (num == snake.front())
-                cout << "[I]";
+                cout << " [I] ";
+            else if(board[num] == 1) 
+                cout << " -" << board[num] << "- ";
+            else if(board[num] == 2) 
+                cout << " <" << board[num] << "> ";
             else 
-                cout << " " << board[num] << " ";
+                cout << "  " << board[num] << "  ";
         }
-        cout << endl;
+        cout << endl << endl;
     }
     cout << "---------------------" << endl;
     cout << "| Food Location : " << setw(2) << food        << "|" << endl;
@@ -68,11 +72,12 @@ void TcsGame::TcsMove(){
     }
 }
 void TcsGame::MakeFood(){
-    for (int i = 0, x = r_random((100-SnakeLength)); i <= x;) {
-        if (board[i] == 0) i++;
-        if (i > x) {
-            food = i-1;
-            board[i-1] = 2;
+    int x = r_random(100-SnakeLength);
+    for (int i = 0, j = 0; j <= x;  i++) {
+        if (board[i] == 0) j++;
+        if (j > x) {
+            food = i - 1;
+            board[i - 1] = 2;
         }
     }
 }
@@ -129,6 +134,7 @@ bool TcsGame::TcsJudge(){
         board[new_snake_head_num] = 1;
         SnakeLength ++;
         score ++;
+        cout << "shit" << endl;
         MakeFood();
     }
     // don't eat
