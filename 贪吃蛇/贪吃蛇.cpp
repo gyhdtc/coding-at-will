@@ -35,7 +35,7 @@ TcsGame::TcsGame(){
     // board
     board.assign(n, 0);
     // move
-    move = '\0';
+    move = 'w';
     // snake
     SnakeLength = 2;
     snake.push_back(45);
@@ -44,6 +44,7 @@ TcsGame::TcsGame(){
     board[55] = 1;
 }
 void TcsGame::TcsShow() const{
+    system("cls"); 
     for (int i = 0; i < SideLength; i++){
         for (int j = 0; j < SideLength; j++){
             int num = i * SideLength + j;
@@ -65,10 +66,15 @@ void TcsGame::TcsShow() const{
     cout << "---------------------" << endl;
 }
 void TcsGame::TcsMove(){
-    cin >> move;
-    while(move != 'w' && move != 'a' && move != 's' && move != 'd' && move != '/'){
+    char temp;
+    temp = getchar();
+    while(temp != 'w' && temp != 'a' && temp != 's' && temp != 'd' && temp != '/' && temp != '\n'){
         cout << "Wrong Input." << endl;
-        cin >> move;
+        temp = getchar();
+    }
+    if (temp != '\n'){
+        move = temp;
+        getchar();
     }
 }
 void TcsGame::MakeFood(){
