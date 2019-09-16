@@ -22,4 +22,7 @@ int main(){
     Person three("gyh", "gyh");
     one.show();
     one.Formashow();
+    int a = 1, b = 2, c = 2;
+    if(a < b < c) cout << "gyh" << endl;
+    return 0;
 }
