@@ -1,6 +1,12 @@
 package main
 
 import "fmt"
+func fun1() {
+	ch := make(chan int)
+	ch <- 1
+	// <- ch
+	fmt.Println("gyh")
+}
 
 func main() {
 	ch := make(chan int, 1) // !!!
