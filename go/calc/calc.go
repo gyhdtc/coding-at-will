@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 	"fmt"
-	"../simplemath"
+	"./simplemath"
 	"strconv"
 )
 
