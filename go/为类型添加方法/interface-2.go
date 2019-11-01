@@ -1,3 +1,4 @@
+// http://c.biancheng.net/view/80.html
 // 日志对外接口
 // 本例中定义一个日志写入器接口（LogWriter），要求写入设备必须遵守这个接口协议才能被日志器（Logger）注册。
 // 日志器有一个写入器的注册方法（Logger 的 RegisterWriter() 方法）。
