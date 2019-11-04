@@ -6,6 +6,7 @@ import (
 	"ipc"
 )
 // https://blog.csdn.net/qq_21816375/article/details/77971697
+// 确认是否实现了Server接口
 var _ ipc.Server = CenterServer{}
 
 type Message struct {
@@ -14,7 +15,14 @@ type Message struct {
 	Content string "content"
 }
 type CenterServer struct {
-	servers map[string] ipc.Server // 这他妈什么意思
+	// Map映射
+	servers map[string] ipc.Server
+	/*
+	声明变量，默认 map 是 nil
+	var map_variable map[key_data_type] value_data_type
+	使用 make 函数
+	map_variable := make(map[key_data_type] value_data_type)
+	*/
 	players []*Player
 	rooms []*Room
 	mutex sync.RWMutex // 还有这个
