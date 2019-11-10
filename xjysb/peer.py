@@ -1,39 +1,24 @@
-import socket
-import string
+import time
 import threading
+from concurrent.futures import ThreadPoolExecutor
 
-def send(server):
-    while True:
-        data = input('>')
-        if data != "exit" and data != "":
-            server.send(data)
-            print ("[send] ", data)
-        elif data == "exit":
-            print ("[END]")
-            break
 
-def rec(client):
-    while True:
-        try:
-            RecData = client.recv(BUFSIZE)
-            print("[rec] ", RecData)
-            if RecData == "exit":
-                print("[END]")
-                break
-        except:
-            break
-        
-# 用 client 连接
-BUFSIZE = 1024
-MyClient = socket.socket()
-FileServerHost = "49.123.93.176"    # 获取 文件 服务器主机名
-FileServerPort = 12345              # 设置 文件 服务器端口号
-MyClient.connect((FileServerHost, FileServerPort))
+def tell(i):
+    print("this is tread {}.".format(i))
+    time.sleep(1)
+    return [i, threading.get_ident()]   # 必须有返回，通过.result()拿到返回值
 
-t1 = threading.Thread(target=send, args=(MyClient,))
-t1.start()
 
-t2 = threading.Thread(target=rec, args=(MyClient,))
-t2.start()
+def callback(obj): 
+    # obj 相当于传过来的future独享，且回调函数必须有这个参数
+    result = obj.result()    # 线程函数的返回值
+    print(result)
 
-MyClient.close()
+
+if __name__ == '__main__':
+    future = ThreadPoolExecutor(10)
+    a = "ddd"
+    for i in range(100):
+        # 线程运行结束后将future对象传给回调函数callback(obj)
+        future.submit(tell, i,).add_done_callback(callback)   
+    future.shutdown(wait=True)      # 此函数用于释放异步执行操作后的系统资源。
