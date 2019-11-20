@@ -19,4 +19,5 @@ time.sleep(5)
 
 condition.acquire()
 condition.notify(10)        # 通知两个线程执行
+time.sleep(10) #果然验证了finally中的阻塞说法
 condition.release()
