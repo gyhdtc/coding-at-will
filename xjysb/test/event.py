@@ -34,3 +34,6 @@ light = threading.Thread(target=traffic_light, args=(e,))
 light.start()
 car1 = threading.Thread(target=car, args=("Tesla", e, ))
 car1.start()
+
+light.join()
+car1.join()
