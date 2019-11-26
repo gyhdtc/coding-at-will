@@ -2,8 +2,8 @@ import os
 import time
 import socket
 import threading
-# 维护一些全局变量
 
+# 维护一些全局变量
 # 全局锁
 # !!! 对于下面 G_ 开头的全局变量，要读写他们一定要使用锁 !!!
 rlock = threading.RLock()
@@ -19,8 +19,11 @@ G_FileMap = {}
 # 同时统计 文件总数 和 已经发送的文件数
 G_FileNum = int(0)
 G_FileSend = int(0)
+# 想要创建的线程数量
+G_NumOfThread = int(2)
 
 # 创建文件映射
+# return int
 def obtain_file_list():
     global G_FileMap
     filepath = str("D:\\Github_File\\coding-at-will\\xjysb\\FileServer")
@@ -29,24 +32,8 @@ def obtain_file_list():
     print("The files : ", G_FileMap)
     return G_FileMap.__len__()
 
-# 分发文件，每个客户端获得的文件数量为 'FileNum/5'
-def SendFile(connet, info):
-    global G_FileMap, G_FileSend
-    temp = int(G_FileNum/5)
-    with rlock:
-        for file in G_FileMap:
-            if G_FileMap[file] == False and (G_FileSend < G_FileNum and temp > 0):
-                print("Send file [", file, "] ---> ", info)
-                # send #
-                G_FileMap[file] = True
-                G_FileSend += 1
-                temp -= 1
-            elif not(G_FileMap[file] == False):
-                pass
-            else:
-                break
-
 # 判断文件是否全部发送（要改）
+# return bool
 def allfile_send():
     res = bool(True)
     with rlock:
@@ -57,6 +44,7 @@ def allfile_send():
 # 启动服务器
 def server_start():
     FileServer.listen(5)
+    return
 
 # 服务器线程
 def ServerThread():
@@ -67,6 +55,29 @@ def ServerThread():
     time.sleep(1)
     # 发送文件
     SendFile(conn, conn.fileno())
+    return
+
+# 分发文件，每个客户端获得的文件数量为 'FileNum/G_NumOfThread'
+def SendFile(connet, info):
+    global G_FileMap, G_FileSend
+    with rlock:
+        if int((G_FileNum - G_FileSend) / G_NumOfThread) == 1:
+            temp = int(G_FileNum / G_NumOfThread + G_FileNum % G_NumOfThread)
+        else:
+            temp = int(G_FileNum / G_NumOfThread)
+        for file in G_FileMap:
+            if G_FileMap[file] == False and (G_FileSend < G_FileNum and temp > 0):
+                print("Send file [", file, "] ---> ", info)
+                # send #
+                connet.send(bytes(file, encoding="utf-8"))
+                G_FileMap[file] = True
+                G_FileSend += 1
+                temp -= 1
+            elif not(G_FileMap[file] == False):
+                pass
+            else:
+                break
+    return
 
 # 主函数
 if __name__ == '__main__':
@@ -77,7 +88,7 @@ if __name__ == '__main__':
     # 开启服务器server_start()
     server_start()
     # 启动5个线程
-    for i in range(5):
+    for i in range(2):
         my_thread = threading.Thread(target = ServerThread)
         thread_list.append(my_thread)
     # 全部启动
@@ -89,7 +100,7 @@ if __name__ == '__main__':
     # 等待全部线程结束
     for t in thread_list:
         t.join()
-    # 所有文件分发出去就关闭服务器
+    # 最后关闭服务器
     FileServer.close()
-
+    
 # END
