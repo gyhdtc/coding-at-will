@@ -13,6 +13,7 @@ def send(server):
             server.send(bytes(data, encoding="utf-8"))
             print ("[send] ", data)
         elif data == "exit":
+            
             server.send(bytes(data, encoding="utf-8"))
             print ("[send] ", data)
             print ("[END]")
@@ -44,7 +45,7 @@ if __name__ == "__main__":
     MyServer.listen(1)
     MyClient, addr = MyServer.accept()
     print("...connection from:", addr)
-
+    
     t1 = threading.Thread(target=send, args=(MyClient,))
     t1.start()
 

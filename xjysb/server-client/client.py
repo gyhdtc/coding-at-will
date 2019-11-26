@@ -38,7 +38,7 @@ if __name__ == "__main__":
     FileServerHost = "127.0.0.1"    # 获取 文件 服务器主机名
     FileServerPort = 12345              # 设置 文件 服务器端口号
     MyClient.connect((FileServerHost, FileServerPort))
-
+    
     t1 = threading.Thread(target=send, args=(MyClient,))
     t1.start()
 

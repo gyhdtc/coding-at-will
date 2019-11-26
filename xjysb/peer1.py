@@ -17,7 +17,7 @@ MyserverPort = int(8000)
 PeerIp = '127.0.0.1'
 PeerPort = int(8001)
 # 文件向量：长度为5的【String，bool】类型映射，String为文件名字，bool类型表示是否获得
-G_FileMap = {}
+G_FileMap = dict()
 # 创建服务器套接字
 MyServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # MyServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -49,27 +49,37 @@ def Client():
         # copy文件列表，上传到服务器，服务器对比之后会给我没有的文件
         print()
 
-# 从服务器接收文件列表和部分文件
-def RecvFileFromServer(MyClient):
+# 从服务器接收文件列表
+def RecvFileMap(MyClient):
     global G_FileMap
     # 接收文件映射 From server
     Recv_FileMap = str(MyClient.recv(1024), 'utf-8')
     with rlock:
         G_FileMap = eval(Recv_FileMap)
     print(G_FileMap)
-    # ********** #
-    # 接收文件 From server
-    Recv_File = str(MyClient.recv(1024), 'utf-8')
-    while Recv_File != "":
-        print(Recv_File)
-        G_FileMap[Recv_File] = True
-        Recv_File = str(MyClient.recv(1024), 'utf-8')
+    
+# 从服务器接受部分文件
+def RecvFile(MyClient):
+    # 文件信息：文件名、大小
+    FileInfo = str(MyClient.recv(1024), 'utf-8')
+    while FileInfo:
+        print(FileInfo)
+        FileInfoMap = eval(FileInfo)
+        filename = FileInfoMap['filename']
+        filesize = FileInfoMap['filesize']
+        # 真正的保存文件 #
+        FileInfo = str(MyClient.recv(1024), 'utf-8')
+    # while Recv_File != "":
+    #     print(Recv_File)
+    #     G_FileMap[Recv_File] = True
+    #     Recv_File = str(MyClient.recv(1024), 'utf-8')
 
 if __name__ == '__main__':
     # 先获取文件列表和某个文件，定义
     MyClient = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     MyClient.connect((FileServerIp, FileServerPort))
-    RecvFileFromServer(MyClient)
+    RecvFileMap(MyClient)
+    RecvFile(MyClient)
     MyClient.close()
 
     # 两个线程：MyServer、MyClient
