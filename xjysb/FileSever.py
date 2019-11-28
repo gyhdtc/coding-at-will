@@ -73,8 +73,7 @@ def SendFile(connect, info):
             if G_FileMap[filename] == False and (G_FileSend < G_FileNum and temp > 0):
                 print("Send file [", filename, "] ---> ", info)
                 # 真实发送文件函数
-                while not(Send_File(connect, filename)):
-                    pass
+                Send_File(connect, filename)
                 # 发送成功，修改变量
                 G_FileMap[filename] = True
                 G_FileSend      = G_FileSend + 1
@@ -88,15 +87,19 @@ def SendFile(connect, info):
 # 真实发送文件函数
 # return bool
 def Send_File(connect, filename):
-    res = True
     # 得到文件的大小,字节
     fileinfo = {
         "filename":filename,
         "filesize":os.path.getsize(str(FilePath + "\\" + filename))
     }
+    # 发送文件信息
     connect.send(bytes(str(fileinfo), encoding="utf-8"))
+    
     # 真正的传输文件 #
-    return res
+    with open('%s/%s'%(FilePath, filename),'rb') as f:
+        for line in f:
+          connect.send(line)
+    # 真正的传输文件 #
 
 # 主函数
 if __name__ == '__main__':

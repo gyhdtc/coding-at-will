@@ -22,6 +22,8 @@ G_FileMap = dict()
 MyServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # MyServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 MyServer.bind((MyServerIp, MyserverPort))
+# 文件保存位置
+FilePath = "D:\\Github_File\\coding-at-will\\xjysb\\peer1"
 
 # 判断文件是否全部发送（要改）
 # return bool
@@ -60,14 +62,24 @@ def RecvFileMap(MyClient):
     
 # 从服务器接受部分文件
 def RecvFile(MyClient):
-    # 文件信息：文件名、大小
+    # 接收文件信息：文件名、大小
     FileInfo = str(MyClient.recv(1024), 'utf-8')
     while FileInfo:
         print(FileInfo)
         FileInfoMap = eval(FileInfo)
         filename = FileInfoMap['filename']
         filesize = FileInfoMap['filesize']
+        
         # 真正的保存文件 #
+        with open(r'%s\\%s'%(FilePath, filename),'wb') as f:
+            recv_size = 0
+            while recv_size < filesize:
+                line = MyClient.recv(1024)
+                f.write(line)
+                recv_size += len(line)
+                print('总大小：%s  已下载大小：%s' % (filesize, recv_size))
+        # 真正的保存文件 #
+        time.sleep(1)
         FileInfo = str(MyClient.recv(1024), 'utf-8')
     # while Recv_File != "":
     #     print(Recv_File)
