@@ -69,15 +69,21 @@ def RecvFile(MyClient):
         FileInfoMap = eval(FileInfo)
         filename = FileInfoMap['filename']
         filesize = FileInfoMap['filesize']
-        
+
+        recv_size = 0
+        while recv_size < filesize:
+            line = MyClient.recv(1024)
+            print(line)
+            recv_size += len(line)
+            print('总大小：%s  已下载大小：%s' % (filesize, recv_size))
         # 真正的保存文件 #
-        with open(r'%s\\%s'%(FilePath, filename),'wb') as f:
-            recv_size = 0
-            while recv_size < filesize:
-                line = MyClient.recv(1024)
-                f.write(line)
-                recv_size += len(line)
-                print('总大小：%s  已下载大小：%s' % (filesize, recv_size))
+        # with open(r'%s\\%s'%(FilePath, filename),'wb') as f:
+        #     recv_size = 0
+        #     while recv_size < filesize:
+        #         line = MyClient.recv(1024)
+        #         f.write(line)
+        #         recv_size += len(line)
+        #         print('总大小：%s  已下载大小：%s' % (filesize, recv_size))
         # 真正的保存文件 #
         time.sleep(1)
         FileInfo = str(MyClient.recv(1024), 'utf-8')

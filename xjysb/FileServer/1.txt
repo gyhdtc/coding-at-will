@@ -501,19 +501,4 @@ MMC 综 合 控 制 策 略 研 究 [J]. 中 国 电
 化,2010,34(12):85-89.
 15. 张俊芳,刘鹏.基于改进模糊神经网络的配电网故障选
 线 研 究 [J]. 电 力 系 统 保 护 与 控
-制,2010,38(22){'filename': '3.txt', 'filesize': 22824}基于模糊神经网络优化的分散式储能微网功率平
-抑方法
-张文惠， 甘毅辉， 杨晓辉
-摘要： 文章摘要， 在储能系统中运用分散式结构可以显著提高容量和电压； 但随之而来的问题是如何高效地控制
-大量的分散式储能单元。本文针对于此，在前人研究基础上， 提出一种基于模糊神经网络优化的储能单元控制的
-方法。 此种神经网络拥有 5 层结构， 将蓄电池组运行参数作为输入， 输出其对应工作模式适配程度的综合量化指
-标， 其值大小反应了蓄电池组子模块（Battery Pack Module， BPM）能否胜任此种工作模式；进一步控制器根据
-量化值的大小选择，利用快速排序算法进行排序， 合适数量的蓄电池组模块并网工作。在 Matlab/Simulink 环境
-下搭建模糊神经网络和微电网模型，进行仿真。 结果验证了此方法的高效性和准确性。与传统策略相比，储能系
-统通过模糊神经网络的优化更能平抑功率波动， 同时能够减少蓄电池开机时间、 提高整体平均荷电状态。
-关键词： 分散式储能； 模糊神经网络；早期预测； 能量综合管理； 功率平抑
-Distributed Energy Storage Micronet Power Stabilizing Method Based on the
-Optimization of Fuzzy Neural Network
-Abstract: The application of distributed structure in the energy storage system can significantly improve the capacity and voltage,
-but the consequent problem is how to efficiently control a large number of distributed energy storage units. On the basis of previous
-research, a control method of energy storage unit based on the optimization of fuzzy
+制,2010,38(22)
