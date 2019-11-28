@@ -23,7 +23,7 @@ MyServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # MyServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 MyServer.bind((MyServerIp, MyserverPort))
 # 文件保存位置
-FilePath = "D:\\Github_File\\coding-at-will\\xjysb\\peer1"
+FilePath = "D:\\Github_File\\coding-at-will\\xjysb\\peer2"
 
 # 判断文件是否全部发送（要改）
 # return bool
@@ -63,34 +63,24 @@ def RecvFileMap(MyClient):
 # 从服务器接受部分文件
 def RecvFile(MyClient):
     # 接收文件信息：文件名、大小
-    FileInfo = str(MyClient.recv(1024), 'utf-8')
+    FileInfo = str(MyClient.recv(100), 'utf-8')
     while FileInfo:
         print(FileInfo)
         FileInfoMap = eval(FileInfo)
         filename = FileInfoMap['filename']
         filesize = FileInfoMap['filesize']
-
-        recv_size = 0
-        while recv_size < filesize:
-            line = MyClient.recv(1024)
-            print(line)
-            recv_size += len(line)
-            print('总大小：%s  已下载大小：%s' % (filesize, recv_size))
-        # 真正的保存文件 #
-        # with open(r'%s\\%s'%(FilePath, filename),'wb') as f:
-        #     recv_size = 0
-        #     while recv_size < filesize:
-        #         line = MyClient.recv(1024)
-        #         f.write(line)
-        #         recv_size += len(line)
-        #         print('总大小：%s  已下载大小：%s' % (filesize, recv_size))
-        # 真正的保存文件 #
-        time.sleep(1)
-        FileInfo = str(MyClient.recv(1024), 'utf-8')
-    # while Recv_File != "":
-    #     print(Recv_File)
-    #     G_FileMap[Recv_File] = True
-    #     Recv_File = str(MyClient.recv(1024), 'utf-8')
+        # 保存文件
+        with open(r'%s\\%s'%(FilePath, filename),'wb') as f:
+            recv_size = 0
+            buff = 10 * 1024
+            while recv_size < filesize:
+                if buff > (filesize - recv_size):
+                    buff = filesize - recv_size
+                recv_data = MyClient.recv(buff)
+                f.write(recv_data)
+                recv_size += len(recv_data)
+                print('总大小：%s  已下载大小：%s' % (filesize, recv_size))
+        FileInfo = str(MyClient.recv(100), 'utf-8')
 
 if __name__ == '__main__':
     # 先获取文件列表和某个文件，定义

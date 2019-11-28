@@ -3,7 +3,7 @@ import string
 import threading
 import time
 flag = 0
-BUFSIZE = 1024
+BUFSIZE = 1
 
 def send(server):
     global flag

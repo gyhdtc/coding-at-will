@@ -20,7 +20,7 @@ G_FileMap = dict()
 G_FileNum = int(0)
 G_FileSend = int(0)
 # 想要创建的线程数量
-G_MaxThreads = int(1)
+G_MaxThreads = int(2)
 # 文件夹
 FilePath = "D:\\Github_File\\coding-at-will\\xjysb\\FileServer"
 
@@ -97,9 +97,10 @@ def Send_File(connect, filename):
     
     # 真正的传输文件 #
     with open('%s/%s'%(FilePath, filename),'rb') as f:
-        for line in f:
-          connect.send(line)
+        data = f.read()
+        connect.sendall(data)
     # 真正的传输文件 #
+    time.sleep(2)
 
 # 主函数
 if __name__ == '__main__':
