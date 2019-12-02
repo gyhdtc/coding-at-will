@@ -1,4 +1,6 @@
 import time
+import asyncio
+
 def coroutine_example(name):
     print("start ... name:", name)
     x = yield name
