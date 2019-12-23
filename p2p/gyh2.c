@@ -36,5 +36,4 @@ brk(b+4);
 b=sbrk((ptrdiff_t)0);
 printf("\tNew end of heap:%p\n",b);
 return 0;
-
- }
+}
